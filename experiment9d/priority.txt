@@ -1,0 +1,41 @@
+import numpy as np
+
+def main():
+    p = np.zeros(20, dtype=int)
+    bt = np.zeros(20, dtype=int)
+    pri = np.zeros(20, dtype=int)
+    wt = np.zeros(20, dtype=int)
+    tat = np.zeros(20, dtype=int)
+    
+    n = int(input("Enter the number of processes --- "))
+    
+    for i in range(n):
+        p[i] = i
+        bt[i], pri[i] = map(int, input(f"Enter the Burst Time & Priority of Process {i} --- ").split())
+    
+    for i in range(n):
+        for k in range(i + 1, n):
+            if pri[i] > pri[k]:
+                p[i], p[k] = p[k], p[i]
+                bt[i], bt[k] = bt[k], bt[i]
+                pri[i], pri[k] = pri[k], pri[i]
+    
+    wtavg = wt[0] = 0
+    tatavg = tat[0] = bt[0]
+    
+    for i in range(1, n):
+        wt[i] = wt[i - 1] + bt[i - 1]
+        tat[i] = tat[i - 1] + bt[i]
+        wtavg += wt[i]
+        tatavg += tat[i]
+    
+    print("\nPROCESS\t\tPRIORITY\tBURST TIME\tWAITING TIME\tTURNAROUND TIME")
+    for i in range(n):
+        print(f"\n{p[i]} \t\t {pri[i]} \t\t {bt[i]} \t\t {wt[i]} \t\t {tat[i]} ")
+    
+    print(f"\nAverage Waiting Time is --- {wtavg / n}")
+    print(f"Average Turnaround Time is --- {tatavg / n}")
+
+if __name__ == "__main__":
+    main()
+
